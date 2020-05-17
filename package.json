@@ -1,0 +1,45 @@
+{
+  "name": "dd-arena-matchmakingserver",
+  "version": "0.0.0",
+  "description": "Generic authentication token provider for Dragon Ring games",
+  "main": "index.js",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "mongoose": "^5.9.10",
+    "uuid": "^7.0.3"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^5.2.7",
+    "@types/mongodb": "^3.5.9",
+    "@types/mongoose": "^5.7.12",
+    "@types/node": "^12.12.37",
+    "@types/uuid": "^7.0.2",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.3",
+    "nyc": "^14.1.1",
+    "ts-node": "^8.9.0",
+    "typescript": "^3.8.3"
+  },
+  "scripts": {
+    "test": "mocha -r ts-node/register tests/**/*.test.ts",
+    "coverage": "nyc -r text -e .ts -x \"tests/*.test.ts\" npm run test",
+    "start": "node ./build/src/index.js",
+    "build": "node ./node_modules/typescript/bin/tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MysteryPoo/DD-Arena-MatchmakingServer.git"
+  },
+  "keywords": [
+    "dragonring",
+    "authentication",
+    "matchmaking"
+  ],
+  "author": "Matthew Thornton",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MysteryPoo/DD-Arena-MatchmakingServer/issues"
+  },
+  "homepage": "https://github.com/MysteryPoo/DD-Arena-MatchmakingServer#readme"
+}
