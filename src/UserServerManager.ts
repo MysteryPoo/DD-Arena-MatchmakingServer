@@ -152,6 +152,7 @@ export class UserServerManager extends ServerBase implements IServer, IConnectio
         this.socketMap.set(newId, client);
         this.socketMap.delete(client.uid);
         client.authenticated = true;
+        client.uid = newId;
     }
 
     public getAuthenticatedUsersCount() : number {

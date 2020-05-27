@@ -47,7 +47,6 @@ export class HandshakeHandler extends MessageHandlerBase {
 
                     let server : UserServerManager = myClient.connectionManager as UserServerManager;
                     server.authenticateClient(user.id, myClient);
-                    myClient.uid = user.id;
 
                     myClient.write(response.serialize());
                 }).catch( err => {
@@ -66,33 +65,44 @@ export class HandshakeHandler extends MessageHandlerBase {
                     UserModel.findById(dbId).exec( (err, user : IUser) => {
                         if (err) console.error(err);
 
-                        let passHash = crypto.createHmac('sha1', user.salt).update(message.password).digest('hex');
-
-                        let response : Handshake = new Handshake(this.messageId);
-                        if (user.password === passHash) {
-                            response.id = user.id;
-                            response.username = user.username;
-                            response.device_uuid = user.device_uuid;
-                            response.lastLogin = user.last_login;
-                            
-                            myClient.gameVersion = message.gameVersion;
-
-                            user.last_login = new Date();
-                            user.save();
-
-                            let server : UserServerManager = myClient.connectionManager as UserServerManager;
-                            server.authenticateClient(user.id, myClient);
-                            myClient.uid = user.id;
-                        } else {
+                        if (null === user) {
+                            let response : Handshake = new Handshake(this.messageId);
                             response.id = "0";
-                            response.username = "Invalid password.";
+                            response.username = "Account does not exist.";
                             response.device_uuid = "0";
                             response.lastLogin = new Date(0);
 
-                            disconnect = true;
-                        }
+                            myClient.write(response.serialize());
 
-                        myClient.write(response.serialize());
+                            disconnect = true;
+                        } else {
+                            let passHash = crypto.createHmac('sha1', user.salt).update(message.password).digest('hex');
+
+                            let response : Handshake = new Handshake(this.messageId);
+                            if (user.password === passHash) {
+                                response.id = user.id;
+                                response.username = user.username;
+                                response.device_uuid = user.device_uuid;
+                                response.lastLogin = user.last_login;
+                                
+                                myClient.gameVersion = message.gameVersion;
+
+                                user.last_login = new Date();
+                                user.save();
+
+                                let server : UserServerManager = myClient.connectionManager as UserServerManager;
+                                server.authenticateClient(user.id, myClient);
+                            } else {
+                                response.id = "0";
+                                response.username = "Invalid password.";
+                                response.device_uuid = "0";
+                                response.lastLogin = new Date(0);
+
+                                disconnect = true;
+                            }
+
+                            myClient.write(response.serialize());
+                        }
                         
                     });
                 } catch (e) {
