@@ -1,17 +1,30 @@
 
 import http from "http";
+import { ILobby } from "./Interfaces/ILobby";
 
 export class ContainerManager {
 
-    public createGameServerContainer(host : string, password : string) : Promise<number> {
+    constructor(private matchmakingServerIp : string = "dda.dragonringstudio.com", private matchmakingServerPort : number = 40001) {}
+
+    public requestGameServerContainer(lobby : ILobby) : Promise<number> {
+        // TODO : First check to see if this docker host is already hosting an allotment of game servers
+        // Figure out which docker host to use once we support more than one.
+        return this.createContainer(lobby);
+    }
+
+    private async createContainer(lobby : ILobby) : Promise<number> {
         return new Promise<number>( (resolve, reject) => {
             let postData = JSON.stringify({
-                "Image": "farkleinspacegameserver:latest",
+                "Image": "victordavion/ddags:latest",
                 "Env" : [
-                    `AUTHIP=host.docker.internal`,
-                    `HOST=${host}`,
-                    `PASSWORD=${password}`,
-                    `TOKEN=1234`
+                    `AUTHIP=${this.matchmakingServerIp}`,
+                    `AUTHPORT=${this.matchmakingServerPort}`,
+                    `PORT=9000`,
+                    `HOST=${lobby.clientList[0].uid}`,
+                    `PASSWORD=${lobby.gameServerPassword}`,
+                    `TOKEN=1234`,
+                    `PLAYERCOUNT=${lobby.maxPlayers}`,
+                    `NOMATCHMAKING=0`
                 ],
                 "HostConfig" : {
                     "AutoRemove" : true,
