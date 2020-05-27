@@ -15,3 +15,6 @@ GSPORT=9001
 MONGODB=some-mongo
 DB=test
 DEBUG=0
+
+Latest build can be found here:
+https://hub.docker.com/repository/docker/victordavion/ddamms
