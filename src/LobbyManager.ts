@@ -11,7 +11,7 @@ export class LobbyManager implements ILobbyManager {
     lobbyList: ILobby[] = [];
     lobbyQueue: ILobby[] = [];
 
-    constructor(public containerManager : ContainerManager) {
+    constructor(public containerManager : ContainerManager, readonly gameServerHostName : string) {
         
     }
 

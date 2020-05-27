@@ -16,6 +16,7 @@ export interface ILobbyManager {
     lobbyList : Array<ILobby>;
     lobbyQueue : Array<ILobby>;
     containerManager : ContainerManager;
+    gameServerHostName : string;
 
     createLobby(host : IClient, isPublic : boolean, maxPlayers : number) : ILobby;
     getLobbyOfClient(client : IClient) : ILobby | undefined;

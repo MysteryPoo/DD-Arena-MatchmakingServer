@@ -20,8 +20,12 @@ db.once('open', function() {
     DatabaseUtility.fillAvatars();
 });
 
-const containerManager : ContainerManager = new ContainerManager(process.env.MMSIP, 40001);
-const lobbyManager : LobbyManager = new LobbyManager(containerManager);
+// TODO : All this hostname/port stuff needs to get refactored to support multiple docker hosts
+const hostname : string = process.env.MMSIP ? process.env.MMSIP : "localhost";
+const port : number = 40001;
+
+const containerManager : ContainerManager = new ContainerManager(hostname, port);
+const lobbyManager : LobbyManager = new LobbyManager(containerManager, hostname);
 
 const server : UserServerManager = new UserServerManager(lobbyManager);
 server.start(gameClientPort);
