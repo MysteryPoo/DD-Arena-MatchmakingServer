@@ -14,6 +14,7 @@ export interface ILobby {
     isPublic : boolean;
     maxPlayers : number;
     clientList : Array<IUserClient>;
+    tokenList : Array<number>;
     numberOfLaunchAttempts : number;
     gameServer : IGameServer | null;
     gameServerPort : number;
