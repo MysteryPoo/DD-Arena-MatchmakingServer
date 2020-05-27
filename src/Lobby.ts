@@ -90,11 +90,11 @@ export class Lobby implements ILobby {
                 reject("Already requested.");
             } else {
                 this.requestedGameServer = true;
-                resolve(this.lobbyMgrRef.containerManager.requestGameServerContainer(this));
                 this.tokenList = []
                 for (let client in this.clientList) {
                     this.tokenList.push(getRandomInt(65535));
                 }
+                resolve(this.lobbyMgrRef.containerManager.requestGameServerContainer(this));
             }
         });
     }

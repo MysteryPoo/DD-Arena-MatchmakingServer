@@ -10,7 +10,11 @@ export class Handshake extends MessageBase {
     public playerTokenList!: Array<number>;
 
     serialize(): Buffer {
-        if (this.playerIdList.length !== this.playerTokenList.length) throw("Array sizes must match.");
+        if (this.playerIdList.length !== this.playerTokenList.length) {
+            console.debug(`playerIdList.length = ${this.playerIdList.length}`);
+            console.debug(`playerTokenList.length = ${this.playerTokenList.length}`);
+            throw new Error("Array sizes must match.");
+        }
         let staticBufferSize : number = 6 + 2 * this.playerTokenList.length + this.playerIdList.length;
         let idListLength : number = 0;
         for (let id of this.playerIdList) {
