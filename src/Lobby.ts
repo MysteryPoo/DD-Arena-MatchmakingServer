@@ -9,9 +9,14 @@ import { LobbyPlayer } from "./Protocol/GameClientInterface/Messages/LobbyPlayer
 import { IUserClient } from "./Interfaces/IUserClient";
 import { StartGame } from "./Protocol/GameClientInterface/Messages/StartGame";
 
+function getRandomInt(max : number) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+
 export class Lobby implements ILobby {
 
     clientList : IUserClient[] = [];
+    tokenList : Array<number> = [];
     numberOfLaunchAttempts : number = 0;
     gameServer : IGameServer | null = null;
     gameServerPort : number = 0;
@@ -85,7 +90,11 @@ export class Lobby implements ILobby {
                 reject("Already requested.");
             } else {
                 this.requestedGameServer = true;
-                resolve(this.lobbyMgrRef.containerManager.createGameServerContainer(this.clientList[0].uid, this.gameServerPassword));
+                resolve(this.lobbyMgrRef.containerManager.requestGameServerContainer(this));
+                this.tokenList = []
+                for (let client in this.clientList) {
+                    this.tokenList.push(getRandomInt(65535));
+                }
             }
         });
     }
@@ -103,9 +112,9 @@ export class Lobby implements ILobby {
         let response : StartGame = new StartGame(MESSAGE_ID.StartGame);
         response.ip = "127.0.0.1";
         response.port = this.gameServerPort;
-        response.token = 1234;
-        for (let client of this.clientList) {
-            client.write(response.serialize());
+        for (let clientIndex in this.clientList) {
+            response.token = this.tokenList[clientIndex];
+            this.clientList[clientIndex].write(response.serialize());
         }
     }
 
