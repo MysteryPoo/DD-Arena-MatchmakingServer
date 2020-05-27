@@ -110,7 +110,7 @@ export class Lobby implements ILobby {
 
     start() : void {
         let response : StartGame = new StartGame(MESSAGE_ID.StartGame);
-        response.ip = "127.0.0.1";
+        response.ip = this.lobbyMgrRef.gameServerHostName;
         response.port = this.gameServerPort;
         for (let clientIndex in this.clientList) {
             response.token = this.tokenList[clientIndex];
