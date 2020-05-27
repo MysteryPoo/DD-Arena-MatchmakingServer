@@ -7,9 +7,30 @@ export class Handshake extends MessageBase {
     public gameVersion!: number;
     public gameServerPassword!: string;
     public playerIdList!: Array<string>;
+    public playerTokenList!: Array<number>;
 
     serialize(): Buffer {
-        throw new Error("Method not implemented.");
+        if (this.playerIdList.length !== this.playerTokenList.length) throw("Array sizes must match.");
+        let staticBufferSize : number = 6 + 2 * this.playerTokenList.length + this.playerIdList.length;
+        let idListLength : number = 0;
+        for (let id of this.playerIdList) {
+            idListLength += Buffer.byteLength(id, 'utf-8');
+        }
+        let bufferSize : number = staticBufferSize + idListLength;
+        let helper : BufferHelper = new BufferHelper(Buffer.allocUnsafe(bufferSize));
+
+        helper.writeUInt8(this.messageId);
+        helper.writeUInt32LE(bufferSize);
+        helper.writeUInt8(this.playerIdList.length);
+        for (let id of this.playerIdList) {
+            helper.writeUInt8(Buffer.byteLength(id, 'utf-8'));
+            helper.writeString(id);
+        }
+        for (let token of this.playerTokenList) {
+            helper.writeUInt16LE(token);
+        }
+
+        return helper.buffer;
     }
 
     deserialize(buffer: Buffer): void {

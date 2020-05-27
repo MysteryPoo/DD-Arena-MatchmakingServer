@@ -17,8 +17,14 @@ export class HandshakeHandler extends MessageHandlerBase {
             myClient.state = gsState.Ready;
             myClient.authenticated = true;
             
+            // Find the lobby with provided player ID
             let lobby : ILobby | undefined = gameServerServer.lobbyMgr.getLobbyOfClientId(message.playerIdList[0]);
             if (lobby && message.gameServerPassword === lobby.gameServerPassword) {
+                let response : Handshake = new Handshake(this.messageId);
+                response.playerIdList = this.playerIdListFromLobby(lobby);
+                response.playerTokenList = lobby.tokenList;
+                myClient.write(response.serialize());
+                
                 lobby.gameServer = myClient;
                 lobby.start();
                 console.debug("Game server connected and is good to go.");
@@ -38,6 +44,14 @@ export class HandshakeHandler extends MessageHandlerBase {
         }
 
         return true;
+    }
+
+    private playerIdListFromLobby(lobby : ILobby) : Array<string> {
+        let playerIdList : Array<string> = [];
+        for (let client of lobby.clientList) {
+            playerIdList.push(client.uid);
+        }
+        return playerIdList;
     }
 
 }
