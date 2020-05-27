@@ -12,7 +12,7 @@ config();
 const gameClientPort : number = Number(process.env.PORT);
 const gameServerPort : number = Number(process.env.GSPORT);
 
-mongoose.connect('mongodb://' + process.env.MONGODB + ':27017/test', {useNewUrlParser: true});
+mongoose.connect('mongodb://' + process.env.MONGODB + ':27017/' + process.env.DB, {useNewUrlParser: true});
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
@@ -20,7 +20,7 @@ db.once('open', function() {
     DatabaseUtility.fillAvatars();
 });
 
-const containerManager : ContainerManager = new ContainerManager();
+const containerManager : ContainerManager = new ContainerManager(process.env.MMSIP, 40001);
 const lobbyManager : LobbyManager = new LobbyManager(containerManager);
 
 const server : UserServerManager = new UserServerManager(lobbyManager);
