@@ -110,7 +110,10 @@ jobs:
             -v //var/run/docker.sock:/var/run/docker.sock \
             -p 40000-40001:9000-9001 \
             --name ddamms \
+            -e PORT=9000 \
+            -e GSPORT=9001 \
             -e MONGODB=${{ secrets.MONGODB }} \
             -e DB=${{ secrets.DB }} \
+            -e MMSIP=dda.dragonringstudio.com \
             victordavion/ddamms:latest
             
