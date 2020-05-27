@@ -32,7 +32,7 @@ export class ContainerManager {
                         "9000/tcp" : [
                             {
                                 "HostIp" : "0.0.0.0",
-                                "HostPort" : undefined
+                                "HostPort" : "40002-40008"
                             }
                         ]
                     },
