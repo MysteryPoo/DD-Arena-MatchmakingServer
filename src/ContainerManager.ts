@@ -24,6 +24,7 @@ export class ContainerManager {
                     `PASSWORD=${lobby.gameServerPassword}`,
                     `TOKEN=1234`,
                     `PLAYERCOUNT=${lobby.maxPlayers}`,
+                    `BOTCOUNT=${lobby.getBotCount()}`,
                     `NOMATCHMAKING=0`
                 ],
                 "HostConfig" : {

@@ -29,6 +29,7 @@ export interface ILobby {
     isReadyToQueue() : boolean;
     requestGameServer() : Promise<number>; // This will change
     getAvailableSlots() : number;
+    getBotCount() : number;
     setPublic(isPublic : boolean) : void;
     start() : void;
     update() : void;

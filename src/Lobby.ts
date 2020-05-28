@@ -23,6 +23,8 @@ export class Lobby implements ILobby {
     gameServerPassword : string = "TEST";
     gameVersion : number = 0;
     requestedGameServer = false;
+    
+    private botCount : number = 0;
 
     constructor(private lobbyMgrRef : ILobbyManager, host : IUserClient, public isPublic : boolean, public maxPlayers : number) {
         this.clientList.push(host);
@@ -90,6 +92,7 @@ export class Lobby implements ILobby {
                 reject("Already requested.");
             } else {
                 this.requestedGameServer = true;
+                this.botCount = this.maxPlayers - this.clientList.length;
                 this.tokenList = []
                 for (let client in this.clientList) {
                     this.tokenList.push(getRandomInt(65535));
@@ -101,6 +104,10 @@ export class Lobby implements ILobby {
 
     getAvailableSlots() : number {
         return this.maxPlayers - this.clientList.length;
+    }
+
+    getBotCount() : number {
+        return this.botCount;
     }
 
     setPublic(isPublic : boolean) {
