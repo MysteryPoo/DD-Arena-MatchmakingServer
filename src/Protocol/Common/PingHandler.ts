@@ -5,8 +5,8 @@ import { Ping } from "./Ping";
 
 export class PingHandler extends MessageHandlerBase {
 
-    handle(buffer: Buffer, mySocket: ISocket): boolean {
-        let message: Ping = new Ping(this.messageId, buffer);
+    handle(data: string, mySocket: ISocket): boolean {
+        let message: Ping = new Ping(this.messageId, data);
         
         if (message.valid) {
             return mySocket.write(message.serialize());

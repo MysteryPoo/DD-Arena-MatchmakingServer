@@ -6,28 +6,22 @@ export class Ping extends MessageBase {
 
     public time! : bigint;
 
-    serialize(): Buffer {
-        let bufferSize : number = 13;
-        let helper : BufferHelper = new BufferHelper(Buffer.allocUnsafe(bufferSize));
-        
-        helper.writeUInt8(this.messageId);
-        helper.writeUInt32LE(bufferSize);
-        helper.writeBigUInt64LE(this.time);
+    serialize(): string {
+        return JSON.stringify({
+            messageId : this.messageId,
+            "time" : this.time
+        });
 
-        return helper.buffer;
     }
 
-    deserialize(buffer: Buffer): void {
+    deserialize(data: string): void {
         try {
-            this.validate(buffer, 8);
+            let message : any = JSON.parse(data);
 
-            let helper : BufferHelper = new BufferHelper(buffer);
-
-            this.time = helper.readBigUInt64LE();
+            this.time = message.time;
 
             this.valid = true;
         } catch (e) {
-            console.error(e);
             this.valid = false;
         }
     }

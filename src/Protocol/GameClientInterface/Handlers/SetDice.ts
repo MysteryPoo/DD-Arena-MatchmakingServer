@@ -11,8 +11,8 @@ import { ILobby } from "../../../Interfaces/ILobby";
 
 export class SetDiceHandler extends MessageHandlerBase {
 
-    handle(buffer: Buffer, myClient: IClient): boolean {
-        let message : SetDice = new SetDice(this.messageId, buffer);
+    handle(data: string, myClient: IClient): boolean {
+        let message : SetDice = new SetDice(this.messageId, data);
 
         if (message.valid && myClient.authenticated) {
             UserModel.findById(myClient.uid).exec( (err, user : IUser) => {
@@ -37,7 +37,7 @@ export class SetDiceHandler extends MessageHandlerBase {
                         response.rank = user.rank;
                         response.username = user.username;
 
-                        let responseBuffer : Buffer = response.serialize();
+                        let responseBuffer : string = response.serialize();
 
                         myClient.write(responseBuffer);
 

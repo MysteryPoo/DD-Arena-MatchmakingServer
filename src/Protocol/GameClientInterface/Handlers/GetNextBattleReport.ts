@@ -7,7 +7,7 @@ import { GetNextBattleReport, PlayerData } from "../Messages/GetNextBattleReport
 
 export class GetNextBattleReportHandler extends MessageHandlerBase {
 
-    handle(buffer: Buffer, myClient: IClient): boolean {
+    handle(data: string, myClient: IClient): boolean {
         if (myClient.authenticated) {
             UserModel.findById(myClient.uid).exec( (err, user : IUser) => {
                 if (user.pendingBattleReports.length > 0) {

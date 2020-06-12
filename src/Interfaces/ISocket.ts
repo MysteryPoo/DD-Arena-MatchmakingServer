@@ -1,5 +1,5 @@
 
 export interface ISocket {
-    write(buffer : Buffer) : boolean;
+    write(data : string) : boolean;
     destroy() : void;
 }

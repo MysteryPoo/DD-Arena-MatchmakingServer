@@ -9,7 +9,8 @@ export class Handshake extends MessageBase {
     public playerIdList!: Array<string>;
     public playerTokenList!: Array<number>;
 
-    serialize(): Buffer {
+    serialize(): string {
+        throw("");
         if (this.playerIdList.length !== this.playerTokenList.length) {
             console.debug(`playerIdList.length = ${this.playerIdList.length}`);
             console.debug(`playerTokenList.length = ${this.playerTokenList.length}`);
@@ -34,31 +35,30 @@ export class Handshake extends MessageBase {
             helper.writeUInt16LE(token);
         }
 
-        return helper.buffer;
     }
 
-    deserialize(buffer: Buffer): void {
-        try {
-            let helper : BufferHelper = new BufferHelper(buffer);
-            this.gameVersion = helper.readUInt8();
+    deserialize(data: string): void {
+        // try {
+        //     let helper : BufferHelper = new BufferHelper(data);
+        //     this.gameVersion = helper.readUInt8();
             
-            let passLength : number = helper.readUInt8();
-            this.gameServerPassword = helper.readString(passLength);
+        //     let passLength : number = helper.readUInt8();
+        //     this.gameServerPassword = helper.readString(passLength);
 
-            let numPlayers : number = helper.readUInt8();
-            if (this.playerIdList === undefined) {
-                this.playerIdList = [];
-            }
-            for (let p = 0; p < numPlayers; ++p) {
-                let idLength : number = helper.readUInt8();
-                this.playerIdList.push(helper.readString(idLength));
-            }
+        //     let numPlayers : number = helper.readUInt8();
+        //     if (this.playerIdList === undefined) {
+        //         this.playerIdList = [];
+        //     }
+        //     for (let p = 0; p < numPlayers; ++p) {
+        //         let idLength : number = helper.readUInt8();
+        //         this.playerIdList.push(helper.readString(idLength));
+        //     }
 
-            this.valid = true;
-        } catch (e) {
-            console.error(e);
-            this.valid = false;
-        }
+        //     this.valid = true;
+        // } catch (e) {
+        //     console.error(e);
+        //     this.valid = false;
+        // }
     }
 
 }

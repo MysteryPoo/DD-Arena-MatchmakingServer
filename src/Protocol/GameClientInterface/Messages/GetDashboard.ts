@@ -1,6 +1,5 @@
 
 import { MessageBase } from "../../../Abstracts/MessageBase";
-import { BufferHelper } from "../../../BufferHelper";
 
 export class GetDashboard extends MessageBase {
 
@@ -13,7 +12,7 @@ export class GetDashboard extends MessageBase {
     public pendingReports! : boolean;
     public pendingAwards! : boolean;
 
-    serialize(): Buffer {
+    serialize(): string {
         let flags : number = 0;
         if (this.pendingReports) {
             flags |= 0b10;
@@ -21,24 +20,20 @@ export class GetDashboard extends MessageBase {
         if (this.pendingAwards) {
             flags |= 0b01;
         }
-
-        let bufferSize = 23;
-        let helper : BufferHelper = new BufferHelper(Buffer.allocUnsafe(bufferSize));
-
-        helper.writeUInt8(this.messageId);
-        helper.writeUInt32LE(bufferSize);
-        helper.writeUInt16LE(this.onlinePlayers);
-        helper.writeUInt16LE(this.lookingPlayers);
-        helper.writeUInt8(this.level);
-        helper.writeUInt32LE(this.credits);
-        helper.writeUInt32LE(this.rares);
-        helper.writeUInt32LE(this.conquest);
-        helper.writeUInt8(flags);
+        return JSON.stringify({
+            messageId : this.messageId,
+            "onlinePlayers" : this.onlinePlayers,
+            "lookingPlayers" : this.lookingPlayers,
+            "level" : this.level,
+            "credits" : this.credits,
+            "rares" : this.rares,
+            "conquest" : this.conquest,
+            "flags" : flags
+        });
         
-        return helper.buffer;
     }
 
-    deserialize(buffer: Buffer): void {
+    deserialize(data: string): void {
         throw new Error("Method not implemented.");
     }
     

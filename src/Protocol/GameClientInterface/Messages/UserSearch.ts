@@ -8,7 +8,8 @@ export class UserSearch extends MessageBase {
     playerList! : Array<IUser>;
     username! : string;
 
-    serialize(): Buffer {
+    serialize(): string {
+        throw("");
         let dynamicSize : number = 0;
         for (let player of this.playerList) {
             dynamicSize += Buffer.byteLength(player.id, 'utf-8');
@@ -27,23 +28,22 @@ export class UserSearch extends MessageBase {
             helper.writeString(player.id);
         }
 
-        return helper.buffer;
     }
     
-    deserialize(buffer: Buffer): void {
-        try {
-            let helper : BufferHelper = new BufferHelper(buffer);
+    deserialize(data: string): void {
+        // try {
+        //     let helper : BufferHelper = new BufferHelper(data);
 
-            let usernameLength : number = helper.readUInt8();
+        //     let usernameLength : number = helper.readUInt8();
 
-            this.validate(buffer, 1 + usernameLength);
+        //     this.validate(data, 1 + usernameLength);
 
-            this.username = helper.readString(usernameLength);
+        //     this.username = helper.readString(usernameLength);
 
-            this.valid = true;
-        } catch (e) {
-            this.valid = false;
-        }
+        //     this.valid = true;
+        // } catch (e) {
+        //     this.valid = false;
+        // }
     }
 
 }

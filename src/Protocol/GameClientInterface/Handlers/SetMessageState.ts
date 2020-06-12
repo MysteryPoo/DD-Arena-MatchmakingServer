@@ -7,8 +7,8 @@ import { IClient } from "../../../Interfaces/IClient";
 
 export class SetMessageStateHandler extends MessageHandlerBase {
 
-    handle(buffer: Buffer, myClient: IClient): boolean {
-        let message : SetMessageState = new SetMessageState(this.messageId, buffer);
+    handle(data: string, myClient: IClient): boolean {
+        let message : SetMessageState = new SetMessageState(this.messageId, data);
 
         if (message.valid && myClient.authenticated) {
             if (message.setRead) {

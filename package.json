@@ -24,7 +24,7 @@
   "scripts": {
     "test": "mocha -r ts-node/register tests/**/*.test.ts",
     "coverage": "nyc -r text -e .ts -x \"tests/*.test.ts\" npm run test",
-    "start": "node ./build/src/index.js",
+    "start": "node ./build/index.js",
     "build": "node ./node_modules/typescript/bin/tsc"
   },
   "repository": {

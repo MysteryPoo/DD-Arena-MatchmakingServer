@@ -8,27 +8,27 @@ export class SetMessageState extends MessageBase {
     public setRead! : boolean;
     public setArchive! : boolean;
 
-    serialize(): Buffer {
+    serialize(): string {
         throw new Error("Method not implemented.");
     }
 
-    deserialize(buffer: Buffer): void {
-        try {
-            let helper : BufferHelper = new BufferHelper(buffer);
+    deserialize(data: string): void {
+        // try {
+        //     let helper : BufferHelper = new BufferHelper(data);
 
-            let idLength : number = helper.readUInt8();
+        //     let idLength : number = helper.readUInt8();
 
-            this.validate(buffer, 3 + idLength);
+        //     this.validate(data, 3 + idLength);
 
-            // TODO : Cram these two flags into a single 8-bit
-            this.id = helper.readString(idLength);
-            this.setRead = helper.readUInt8() === 0 ? false : true;
-            this.setArchive = helper.readUInt8() === 0 ? false : true;
+        //     // TODO : Cram these two flags into a single 8-bit
+        //     this.id = helper.readString(idLength);
+        //     this.setRead = helper.readUInt8() === 0 ? false : true;
+        //     this.setArchive = helper.readUInt8() === 0 ? false : true;
 
-            this.valid = true;
-        } catch (e) {
-            this.valid = false;
-        }
+        //     this.valid = true;
+        // } catch (e) {
+        //     this.valid = false;
+        // }
     }
 
 }

@@ -14,7 +14,8 @@ export class GetNextBattleReport extends MessageBase {
     playerList : Array<PlayerData> = [];
     trophyList : Array<number> = [];
 
-    serialize(): Buffer {
+    serialize(): string {
+        throw("No");
         let winnerIdLength : number = Buffer.byteLength(this.winnerId, 'utf-8');
         let playerListIdLength : number = 0;
         for (let player of this.playerList) {
@@ -45,10 +46,9 @@ export class GetNextBattleReport extends MessageBase {
         console.debug(this);
         console.debug(helper.buffer);
 
-        return helper.buffer;
     }
 
-    deserialize(buffer: Buffer): void {
+    deserialize(data: string): void {
         throw new Error("Method not implemented.");
     }
 

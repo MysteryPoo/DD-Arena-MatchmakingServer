@@ -8,8 +8,8 @@ import { UserServerManager } from "../../../UserServerManager";
 
 export class MessageInfoHandler extends MessageHandlerBase {
 
-    handle(buffer: Buffer, myClient: IClient): boolean {
-        let message : MessageInfo = new MessageInfo(this.messageId, buffer);
+    handle(data: string, myClient: IClient): boolean {
+        let message : MessageInfo = new MessageInfo(this.messageId, data);
 
         if (message.valid && myClient.authenticated) {
             UserModel.findById(message.recipient).exec( (err, recipient : IUser) => {

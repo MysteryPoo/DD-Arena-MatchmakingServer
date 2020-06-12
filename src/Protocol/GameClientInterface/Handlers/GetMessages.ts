@@ -8,7 +8,7 @@ import { MESSAGE_ID } from "../../../UserServerManager";
 
 export class GetMessagesHandler extends MessageHandlerBase {
 
-    handle(buffer: Buffer, mySocket: IClient): boolean {
+    handle(data: string, mySocket: IClient): boolean {
         if (mySocket.authenticated) {
             UserModel.findById(mySocket.uid).exec( (err, user : IUser) => {
                 if (err) console.error(err);

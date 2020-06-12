@@ -12,7 +12,8 @@ export class MessageInfo extends MessageBase {
     isNew! : boolean;
     recipient! : string;
 
-    serialize(): Buffer {
+    serialize(): string {
+        throw("");
         let idLength : number = Buffer.byteLength(this.id, 'utf-8');
         let senderLength : number = Buffer.byteLength(this.sender, 'utf-8');
         let senderNameLength : number = Buffer.byteLength(this.senderName, 'utf-8');
@@ -37,28 +38,27 @@ export class MessageInfo extends MessageBase {
         helper.writeString(this.message);
         helper.writeUInt8(this.isNew ? 1 : 0);
 
-        return helper.buffer;
     }
 
-    deserialize(buffer: Buffer): void {
-        try {
-            let helper : BufferHelper = new BufferHelper(buffer);
+    deserialize(data: string): void {
+        // try {
+        //     let helper : BufferHelper = new BufferHelper(buffer);
 
-            let recipientLength : number = helper.readUInt8();
-            this.recipient = helper.readString(recipientLength);
+        //     let recipientLength : number = helper.readUInt8();
+        //     this.recipient = helper.readString(recipientLength);
 
-            let subjectLength : number = helper.readUInt8();
-            this.subject = helper.readString(subjectLength);
+        //     let subjectLength : number = helper.readUInt8();
+        //     this.subject = helper.readString(subjectLength);
 
-            let messageLength : number = helper.readUInt8();
-            this.message = helper.readString(messageLength);
+        //     let messageLength : number = helper.readUInt8();
+        //     this.message = helper.readString(messageLength);
 
-            this.validate(buffer, 3 + recipientLength + subjectLength + messageLength);
+        //     this.validate(buffer, 3 + recipientLength + subjectLength + messageLength);
 
-            this.valid = true;
-        } catch (e) {
-            this.valid = false;
-        }
+        //     this.valid = true;
+        // } catch (e) {
+        //     this.valid = false;
+        // }
     }
 
 }

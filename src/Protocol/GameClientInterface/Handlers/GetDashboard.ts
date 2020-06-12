@@ -7,7 +7,7 @@ import { UserServerManager } from "../../../UserServerManager";
 
 export class GetDashboardHandler extends MessageHandlerBase {
 
-    handle(buffer: Buffer, myClient: IClient): boolean {
+    handle(data: string, myClient: IClient): boolean {
         if (myClient.authenticated) {
             UserModel.findById(myClient.uid).select({level: 1, credits: 1, rares: 1, conquest: 1, pendingAwards: 1, pendingBattleReports: 1}).exec( (err, user : IUser) => {
                 if (err) console.error(err);

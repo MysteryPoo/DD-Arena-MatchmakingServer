@@ -36,29 +36,18 @@ export abstract class ClientBase implements IClient {
             socket.connect(connectionOptions, onConnectCallback);
         }
 
-        this.socket.on('data', (data : Buffer) => {
-            let tell : number = 0;
-            while(tell < data.byteLength) {
-                //let rawIdentifier : number = data.readUInt8(tell);
-                //let messageSize : number = data.readUInt32LE(tell + 1);
-                //let messageData : Buffer = data.slice(tell + 5, tell + messageSize);
-
-                let packet : Packet = this.parseMessage(data, tell);
-
-                if (this.ValidateMessageId(packet.header.messageId)) {
-                    if (packet.isValid) {
-                        if (this.handlerList[packet.header.messageId]) {
-                            this.handlerList[packet.header.messageId].handle(packet.data, this);
-                        } else {
-                            console.error(`No handler registered for this messageType: ${this.GetMessageTypeString(packet.header.messageId)}(${packet.header.messageId})`);
-                        }
-                    } else {
-                        console.error(`Packet invalid: type [${this.GetMessageTypeString(packet.header.messageId)}]; data [${packet.data}]`);
-                    }
+        this.socket.on('data', (data : string) => {
+            try {
+                let index : number = data.indexOf("{");
+                data = data.toString().substring(index);
+                let message : any = JSON.parse(data);
+                if (this.ValidateMessageId(message.messageId)) {
+                    this.handlerList[message.messageId].handle(data, this);
                 } else {
-                    console.error(`Unknown messageType: ${packet.header.messageId}`);
+                    console.error(`Unknown messageType: ${message.messageId}`);
                 }
-                tell += packet.header.messageSize;
+            } catch(e) {
+                console.debug(`Failed to parse the following data: ${data}`);
             }
         })
         .on('error', (err : Error) => {
@@ -80,8 +69,8 @@ export abstract class ClientBase implements IClient {
 
     abstract GetMessageTypeString(identifier : number) : string;
 
-    public write(buffer : Buffer) : boolean {
-        this.isConnected = this.socket.write(buffer);
+    public write(data : string) : boolean {
+        this.isConnected = this.socket.write(data);
         return this.isConnected;
     }
 

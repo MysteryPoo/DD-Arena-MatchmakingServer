@@ -9,8 +9,8 @@ import { MESSAGE_ID, UserServerManager } from "../../../UserServerManager";
 
 export class FriendRequestHandler extends MessageHandlerBase {
 
-    handle(buffer: Buffer, myClient: IClient): boolean {
-        let message : FriendRequest = new FriendRequest(this.messageId, buffer);
+    handle(data: string, myClient: IClient): boolean {
+        let message : FriendRequest = new FriendRequest(this.messageId, data);
         // TODO : Refactor this mess
         if (message.valid && myClient.authenticated) {
             UserModel.findById(myClient.uid).select({friendList : 1}).exec( (err, user : IUser) => {

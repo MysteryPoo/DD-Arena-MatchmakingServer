@@ -8,8 +8,8 @@ import { MESSAGE_ID } from "../../../UserServerManager";
 
 export class SetVisibleUsernameHandler extends MessageHandlerBase {
 
-    handle(buffer: Buffer, myClient: IClient): boolean {
-        let message : SetVisibleUsername = new SetVisibleUsername(this.messageId, buffer);
+    handle(data: string, myClient: IClient): boolean {
+        let message : SetVisibleUsername = new SetVisibleUsername(this.messageId, data);
 
         if (message.valid) {
             if (myClient.authenticated) {

@@ -7,8 +7,8 @@ import { IUserClient } from "../../../Interfaces/IUserClient";
 
 export class LobbyPlayerHandler extends MessageHandlerBase {
 
-    handle(buffer: Buffer, myClient: IUserClient): boolean {
-        let message : LobbyPlayer = new LobbyPlayer(this.messageId, buffer);
+    handle(data: string, myClient: IUserClient): boolean {
+        let message : LobbyPlayer = new LobbyPlayer(this.messageId, data);
 
         if (message.valid && myClient.authenticated) {
             let myServer : UserServerManager = myClient.connectionManager as UserServerManager;

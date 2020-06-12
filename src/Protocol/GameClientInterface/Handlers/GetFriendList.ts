@@ -7,7 +7,7 @@ import { UserServerManager } from "../../../UserServerManager";
 
 export class GetFriendListHandler extends MessageHandlerBase {
 
-    handle(buffer: Buffer, myClient: IClient): boolean {
+    handle(data: string, myClient: IClient): boolean {
         if (myClient.authenticated) {
             UserModel.findById(myClient.uid).select({friendList : 1}).exec( (err, user : IUser) => {
                 if (err) console.error(err);
