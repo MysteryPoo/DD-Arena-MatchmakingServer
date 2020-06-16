@@ -21,6 +21,7 @@ Designed to be ran inside of a Docker container. Any other use is not supported 
 
 ## Dependencies
 * MongoDB Server (Recommended to use Docker as well)
+    * docker run --name some-mongo -d mongo:latest
 * Docker Host with API reachable from this server (Required for Game Server spawning) Code changes required to support if ran outside of docker.
 
 ## With Docker
@@ -55,6 +56,8 @@ The MONGODB ENV should be set to the hostname/IP of the mongo server; whether it
 | MONGODB | The hostname/IP of a MongoDB server. | A hostname/IP |
 | DB | The database name according to Mongo | A string |
 | MMSIP | The external hostname/IP of THIS server | A hostname/IP |
+| SERVERPOOLSIZE | The number of Game Servers this host will support | A number |
+| SERVERPORTFIRST | The beginning port for game servers to be hosted on. | A number 1-65535 |
 
 Note: It's planned to deprecate the MMSIP when there's a better way to implant this data at runtime discovered.
 

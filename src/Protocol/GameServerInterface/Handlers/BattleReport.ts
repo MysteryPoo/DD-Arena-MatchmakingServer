@@ -9,8 +9,8 @@ import UserModel from "../../../Models/User.model";
 
 export class BattleReportHandler extends MessageHandlerBase {
 
-    handle(buffer: Buffer, myClient: IGameServer): boolean {
-        let message : BattleReport = new BattleReport(this.messageId, buffer);
+    handle(data: string, myClient: IGameServer): boolean {
+        let message : BattleReport = new BattleReport(this.messageId, data);
         if (message.valid) {
             BattleReportModel.create({
                 winnerId : new ObjectId(message.winnerId),

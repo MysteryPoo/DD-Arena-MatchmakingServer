@@ -11,8 +11,10 @@ import MessageModel, { IMessage } from "../../../Models/Message.model";
 
 export class HandshakeHandler extends MessageHandlerBase {
 
-    handle(buffer: Buffer, myClient: IUserClient): boolean {
-        let message : Handshake = new Handshake(this.messageId, buffer);
+    handle(data: string, myClient: IUserClient): boolean {
+        console.debug("Inside handshake handler")
+        let message : Handshake = new Handshake(this.messageId, data);
+        console.debug(`Message: ${JSON.stringify(message)}`);
         let disconnect = false;
 
         if (message.valid && !myClient.authenticated) {

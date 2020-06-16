@@ -8,7 +8,7 @@ import { StartGame } from "../Messages/StartGame";
 
 export class StartGameHandler extends MessageHandlerBase {
 
-    handle(buffer: Buffer, myClient: IUserClient): boolean {
+    handle(data: string, myClient: IUserClient): boolean {
         if (myClient.authenticated) {
             let userServer : UserServerManager = myClient.connectionManager as UserServerManager;
             let lobby : ILobby | undefined = userServer.lobbyMgr.getLobbyOfClient(myClient);

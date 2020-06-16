@@ -8,8 +8,8 @@ import { ILobby } from "../../../Interfaces/ILobby";
 
 export class HandshakeHandler extends MessageHandlerBase {
 
-    handle(buffer: Buffer, myClient: IGameServer): boolean {
-        let message : Handshake = new Handshake(this.messageId, buffer);
+    handle(data: string, myClient: IGameServer): boolean {
+        let message : Handshake = new Handshake(this.messageId, data);
         let disconnect : boolean = false;
 
         if (message.valid) {

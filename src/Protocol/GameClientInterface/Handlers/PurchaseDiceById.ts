@@ -9,8 +9,8 @@ import { GetDashboardHandler } from "./GetDashboard";
 
 export class PurchaseDiceByIdHandler extends MessageHandlerBase {
 
-    public handle(buffer : Buffer, myClient : IClient): boolean {
-        let message : PurchaseDiceById = new PurchaseDiceById(this.messageId, buffer);
+    public handle(data : string, myClient : IClient): boolean {
+        let message : PurchaseDiceById = new PurchaseDiceById(this.messageId, data);
 
         if (message.valid && myClient.authenticated) {
             DiceModel.findById(message.id).exec( (err, dice : IDice) => {

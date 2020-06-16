@@ -9,8 +9,8 @@ import { GetDashboardHandler } from "./GetDashboard";
 
 export class PurchaseAvatarByIdHandler extends MessageHandlerBase {
 
-    public handle(buffer : Buffer, myClient : IClient): boolean {
-        let message : PurchaseAvatarById = new PurchaseAvatarById(this.messageId, buffer);
+    public handle(data : string, myClient : IClient): boolean {
+        let message : PurchaseAvatarById = new PurchaseAvatarById(this.messageId, data);
 
         if (message.valid && myClient.authenticated) {
             AvatarModel.findById(message.id).exec( (err, avatar : IAvatar) => {

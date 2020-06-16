@@ -7,7 +7,8 @@ export class PurchaseDiceById extends MessageBase {
     public message! : string;
     public id! : string;
 
-    public serialize() : Buffer {
+    public serialize() : string {
+        throw("");
         let messageLength : number = Buffer.byteLength(this.message, 'utf8');
         let bufferSize : number = 6 + messageLength;
 
@@ -17,25 +18,24 @@ export class PurchaseDiceById extends MessageBase {
         helper.writeUInt8(messageLength);
         helper.writeString(this.message);
 
-        return helper.buffer;
     }
 
-    public deserialize(buffer : Buffer) : void {
-        try {
-            let helper : BufferHelper = new BufferHelper(buffer);
+    public deserialize(data : string) : void {
+        // try {
+        //     let helper : BufferHelper = new BufferHelper(buffer);
 
-            let idLength : number = helper.readUInt8();
+        //     let idLength : number = helper.readUInt8();
 
-            const bufferSize = 1 + idLength;
+        //     const bufferSize = 1 + idLength;
 
-            this.validate(buffer, bufferSize);
+        //     this.validate(buffer, bufferSize);
 
-            this.id = helper.readString(idLength);
+        //     this.id = helper.readString(idLength);
 
-            this.valid = true;
-        } catch (e) {
-            console.error(e);
-            this.valid = false;
-        }
+        //     this.valid = true;
+        // } catch (e) {
+        //     console.error(e);
+        //     this.valid = false;
+        // }
     }
 }

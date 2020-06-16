@@ -1,6 +1,5 @@
 
 import { MessageBase } from "../../../Abstracts/MessageBase";
-import { BufferHelper } from "../../../BufferHelper";
 
 export class StartGame extends MessageBase {
 
@@ -8,24 +7,16 @@ export class StartGame extends MessageBase {
     port! : number;
     token! : number;
 
-    serialize(): Buffer {
-        let ipLength : number = Buffer.byteLength(this.ip, 'utf-8');
-        
-        let bufferSize : number = 10 + ipLength;
-
-        let helper : BufferHelper = new BufferHelper(Buffer.allocUnsafe(bufferSize));
-
-        helper.writeUInt8(this.messageId);
-        helper.writeUInt32LE(bufferSize);
-        helper.writeUInt8(ipLength);
-        helper.writeString(this.ip);
-        helper.writeUInt16LE(this.port);
-        helper.writeUInt16LE(this.token);
-
-        return helper.buffer;
+    serialize(): string {
+        return JSON.stringify({
+            messageId : this.messageId,
+            "ip" : this.ip,
+            "port" : this.port,
+            "token" : this.token
+        });
     }
 
-    deserialize(buffer: Buffer): void {
+    deserialize(data: string): void {
         throw new Error("Method not implemented.");
     }
 

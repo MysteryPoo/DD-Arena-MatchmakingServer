@@ -6,8 +6,8 @@ import UserModel, { IUser } from "../../../Models/User.model";
 
 export class GetPublicPlayerInfoHandler extends MessageHandlerBase {
 
-    handle(buffer: Buffer, myClient: IClient): boolean {
-        let message : GetPublicPlayerInfo = new GetPublicPlayerInfo(this.messageId, buffer);
+    handle(data: string, myClient: IClient): boolean {
+        let message : GetPublicPlayerInfo = new GetPublicPlayerInfo(this.messageId, data);
 
         if (message.valid && myClient.authenticated) {
             UserModel.findById(message.id).select({username: 1, avatarUri: 1, rank: 1}).exec( (err, user : IUser) => {

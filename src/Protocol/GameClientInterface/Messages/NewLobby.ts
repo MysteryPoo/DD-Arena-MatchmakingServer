@@ -6,16 +6,16 @@ export class NewLobby extends MessageBase {
     public isPublic! : boolean;
     public maxPlayers! : number;
 
-    serialize(): Buffer {
+    serialize(): string {
         throw new Error("Method not implemented.");
     }
 
-    deserialize(buffer: Buffer): void {
+    deserialize(data: string): void {
         try {
-            this.validate(buffer, 2);
+            let message : any = JSON.parse(data);
 
-            this.isPublic = buffer.readUInt8(0) === 0 ? false : true;
-            this.maxPlayers = buffer.readUInt8(1);
+            this.isPublic = message.isPublic;
+            this.maxPlayers = message.maxPlayers;
 
             this.valid = true;
         } catch (e) {

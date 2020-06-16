@@ -8,7 +8,7 @@ import { ObjectId } from "mongodb";
 
 export class GetDiceListHandler extends MessageHandlerBase {
 
-    handle(buffer: Buffer, myClient: IClient): boolean {
+    handle(data: string, myClient: IClient): boolean {
         if (myClient.authenticated) {
             UserModel.findById(myClient.uid).select({diceList : 1}).exec( (err, user : IUser) => {
                 if (err) console.error(err);
