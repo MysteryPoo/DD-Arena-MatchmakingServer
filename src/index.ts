@@ -22,10 +22,11 @@ db.once('open', function() {
 
 // TODO : All this hostname/port stuff needs to get refactored to support multiple docker hosts
 const hostname : string = process.env.MMSIP ? process.env.MMSIP : "localhost";
+const externalPort : number = process.env.GSPORTEXT ? Number(process.env.GSPORTEXT) : 40001
 const serverPoolSize : number = process.env.SERVERPOOLSIZE ? Number(process.env.SERVERPOOLSIZE) : 5;
 const serverPortFirst : number = process.env.SERVERPORTFIRST ? Number(process.env.SERVERPORTFIRST) : 40002;
 
-const containerManager : ContainerManager = new ContainerManager(hostname, gameServerPort, serverPoolSize, serverPortFirst);
+const containerManager : ContainerManager = new ContainerManager(hostname, externalPort, serverPoolSize, serverPortFirst);
 const lobbyManager : LobbyManager = new LobbyManager(containerManager, hostname);
 
 const server : UserServerManager = new UserServerManager(lobbyManager);
