@@ -4,15 +4,24 @@ import { ILobby } from "./Interfaces/ILobby";
 
 export class ContainerManager {
 
-    constructor(private matchmakingServerIp : string = "dda.dragonringstudio.com", private matchmakingServerPort : number = 40001) {}
+    private containerMap : Map<number, any> = new Map();
 
-    public requestGameServerContainer(lobby : ILobby) : Promise<number> {
-        // TODO : First check to see if this docker host is already hosting an allotment of game servers
-        // Figure out which docker host to use once we support more than one.
-        return this.createContainer(lobby);
+    constructor(private matchmakingServerIp : string = "dda.dragonringstudio.com", private matchmakingServerPort : number = 40001,
+                private serverPoolSize : number, private serverPortStart : number) {}
+
+    public async requestGameServerContainer(lobby : ILobby) : Promise<number> {
+        return new Promise<number>(async (resolve, reject) => {
+            await this.UpdateServerPool();
+            let port : number = this.getFreeServerSlot();
+            if (port !== -1) {
+                resolve(this.createContainer(lobby, port));
+            } else {
+                reject("No servers available.");
+            }
+        });
     }
 
-    private async createContainer(lobby : ILobby) : Promise<number> {
+    private async createContainer(lobby : ILobby, port : number) : Promise<number> {
         return new Promise<number>( (resolve, reject) => {
             let postData = JSON.stringify({
                 "Image": "victordavion/ddags:latest",
@@ -29,17 +38,25 @@ export class ContainerManager {
                 ],
                 "HostConfig" : {
                     "AutoRemove" : true,
+                    "NetworkMode": "mongo_network",
                     "PortBindings" : {
                         "9000/tcp" : [
                             {
                                 "HostIp" : "0.0.0.0",
-                                "HostPort" : "40002-40008"
+                                "HostPort" : `${port}`
+                            }
+                        ],
+                        "9000/udp" : [
+                            {
+                                "HostIp" : "0.0.0.0",
+                                "HostPort" : `${port}`
                             }
                         ]
                     },
-                    "PublishAllPorts": true
+                    "PublishAllPorts": false
                 }
             });
+            console.debug(postData);
     
             let options = {
                 socketPath: '/var/run/docker.sock',
@@ -132,6 +149,53 @@ export class ContainerManager {
     
             request.end();
         });
+    }
+
+    private async UpdateServerPool() : Promise<void> {
+        this.containerMap = new Map();
+        // TODO : Refactor to use the built in filter parameter
+        return new Promise<void>( (resolve, reject) => {
+            let options = {
+                socketPath: '/var/run/docker.sock',
+                path: `/containers/json`,
+                method: 'GET'
+            }
+    
+            const request = http.request(options, (response) => {
+                let data = "";
+                response.setEncoding('utf8');
+                response.on('data', chunk => {
+                    data += chunk;
+                });
+                response.on('error', err => {
+                    console.error(err);
+                    reject(err);
+                });
+                response.on('end', () => {
+                    console.debug(data);
+                    let containerList : Array<any> = JSON.parse(data);
+                    for (let container of containerList) {
+                        if (container.Image === "victordavion/ddags:latest") {
+                            let port = container.Ports[0].PublicPort;
+                            this.containerMap.set(port, container);
+                        }
+                    }
+                    resolve();
+                });
+            });
+    
+            request.end();
+        });
+    }
+
+    private getFreeServerSlot() : number {
+        for (let port : number = this.serverPortStart; port < this.serverPortStart + this.serverPoolSize; ++port) {
+            let container : any = this.containerMap.get(port);
+            if (undefined === container) {
+                return port;
+            }
+        }
+        return -1;
     }
 
 }
